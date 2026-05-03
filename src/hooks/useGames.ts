@@ -7,6 +7,7 @@ interface FetchedGames {
   name: string;
   cover?: { id: number; image_id: string };
   platforms: Platform[];
+  rating: number;
 }
 
 export interface Platform {
@@ -19,6 +20,7 @@ export interface Game {
   name: string;
   imageUrl?: string;
   platforms: Platform[];
+  rating: number;
 }
 
 const useGames = () => {
