@@ -6,12 +6,19 @@ interface FetchedGames {
   id: number;
   name: string;
   cover?: { id: number; image_id: string };
+  platforms: Platform[];
+}
+
+export interface Platform {
+  id: number;
+  name: string;
 }
 
 export interface Game {
   id: number;
   name: string;
   imageUrl?: string;
+  platforms: Platform[];
 }
 
 const useGames = () => {
@@ -26,13 +33,12 @@ const useGames = () => {
     apiClient
       .post<FetchedGames[]>(
         "/games",
-        "fields name, rating, cover.image_id; limit 10;",
+        "fields name, rating, first_release_date, cover.image_id, platforms.name; where platforms = (6,48,49,130,167,169); limit 10;",
         { signal: controller.signal },
       )
       .then((res) => {
         const transformed = res.data.map((game) => ({
-          id: game.id,
-          name: game.name,
+          ...game,
           imageUrl: game.cover?.image_id
             ? getImageUrl(game.cover.image_id)
             : undefined,
