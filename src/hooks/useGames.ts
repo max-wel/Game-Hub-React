@@ -26,8 +26,9 @@ export interface Game {
 const useGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [error, setError] = useState([]);
+  const [isLoading, setLoading] = useState(true);
   const getImageUrl = (imageId: string) =>
-    `https://images.igdb.com/igdb/image/upload/t_cover_big/${imageId}.jpg`;
+    `https://images.igdb.com/igdb/image/upload/t_1080p/${imageId}.jpg`;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -51,11 +52,12 @@ const useGames = () => {
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
-      });
+      })
+      .finally(() => setLoading(false));
     return () => controller.abort();
   }, []);
 
-  return { games, error };
+  return { games, error, isLoading };
 };
 
 export default useGames;
