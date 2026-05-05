@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
-import type { Genre } from "./useGenres";
+import type { GameQuery } from "../App";
 
 interface FetchedGames {
   id: number;
@@ -24,10 +24,7 @@ export interface Game {
   rating: number;
 }
 
-const useGames = (
-  selectedGenre: Genre | null,
-  selectedPlatform: number | null,
-) => {
+const useGames = (gameQuery: GameQuery) => {
   const [games, setGames] = useState<Game[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
@@ -37,12 +34,12 @@ const useGames = (
     "platforms = (6,48,49,130,167,169)", // base filter
   ];
 
-  if (selectedGenre) {
-    where.push(`genres = (${selectedGenre.id})`);
+  if (gameQuery.genre) {
+    where.push(`genres = (${gameQuery.genre.id})`);
   }
 
-  if (selectedPlatform) {
-    where.push(`platforms = (${selectedPlatform})`);
+  if (gameQuery.platform) {
+    where.push(`platforms = (${gameQuery.platform})`);
   }
 
   const query = `
@@ -77,7 +74,7 @@ const useGames = (
         }
       });
     return () => controller.abort();
-  }, [selectedGenre, selectedPlatform]);
+  }, [gameQuery]);
 
   return { games, error, isLoading };
 };
