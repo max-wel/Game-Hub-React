@@ -25,7 +25,7 @@ export interface Game {
 
 const useGames = () => {
   const [games, setGames] = useState<Game[]>([]);
-  const [error, setError] = useState([]);
+  const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(true);
   const getImageUrl = (imageId: string) =>
     `https://images.igdb.com/igdb/image/upload/t_1080p/${imageId}.jpg`;
