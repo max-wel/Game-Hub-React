@@ -3,10 +3,11 @@ import useGenres, { type Genre } from "../hooks/useGenres";
 import { genreIconMap } from "../services/genreIconMap";
 
 interface Props {
+  selectedGenre: Genre | null;
   onSelectGenre: (genre: Genre) => void;
 }
 
-const GenreList = ({ onSelectGenre }: Props) => {
+const GenreList = ({ onSelectGenre, selectedGenre }: Props) => {
   const { data, isLoading } = useGenres();
   if (isLoading) return <Spinner />;
   return (
@@ -17,7 +18,7 @@ const GenreList = ({ onSelectGenre }: Props) => {
             <Icon as={genreIconMap[genre.id]} size="lg" color="gray.500" />
             <Link
               fontSize="md"
-              fontWeight="medium"
+              fontWeight={genre.id == selectedGenre?.id ? "bolder" : "medium"}
               variant="underline"
               onClick={() => onSelectGenre(genre)}
             >
