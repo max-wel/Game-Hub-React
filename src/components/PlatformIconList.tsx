@@ -1,21 +1,13 @@
 import { HStack, Icon } from "@chakra-ui/react";
-import { FaWindows, FaPlaystation, FaXbox } from "react-icons/fa";
 // import { MdPhoneIphone } from "react-icons/md";
-import { BsNintendoSwitch } from "react-icons/bs";
 import type { Platform } from "../hooks/useGames";
-import type { IconType } from "react-icons";
+import { platformIconMap } from "../services/platformIconMap";
 
 interface Props {
   platforms: Platform[];
 }
 
-const PlatformIconList = ({ platforms }: Props) => {
-  const iconMap: { [key: string]: IconType } = {
-    pc: FaWindows,
-    playstation: FaPlaystation,
-    xbox: FaXbox,
-    nintendo: BsNintendoSwitch,
-  };
+function PlatformIconList({ platforms }: Props) {
   const platformGroupMap: { [key: number]: string } = {
     // PC
     6: "pc",
@@ -42,10 +34,10 @@ const PlatformIconList = ({ platforms }: Props) => {
   return (
     <HStack>
       {uniqueGroups.map((g) => (
-        <Icon key={g} as={iconMap[g]} color="gray.500" />
+        <Icon key={g} as={platformIconMap[g]} color="gray.500" />
       ))}
     </HStack>
   );
-};
+}
 
 export default PlatformIconList;
