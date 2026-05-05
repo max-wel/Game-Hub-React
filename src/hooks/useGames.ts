@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
+import type { Genre } from "./useGenres";
 
 interface FetchedGames {
   id: number;
@@ -23,20 +24,29 @@ export interface Game {
   rating: number;
 }
 
-const useGames = () => {
+const useGames = (selectedGenre: Genre | null) => {
   const [games, setGames] = useState<Game[]>([]);
   const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const getImageUrl = (imageId: string) =>
     `https://images.igdb.com/igdb/image/upload/t_1080p/${imageId}.jpg`;
 
   useEffect(() => {
     const controller = new AbortController();
+    setLoading(true);
 
     apiClient
       .post<FetchedGames[]>(
         "/games",
-        "fields name, rating, first_release_date, cover.image_id, platforms.name; where platforms = (6,48,49,130,167,169); limit 10;",
+        selectedGenre
+          ? `
+      fields name, rating, first_release_date, cover.image_id, platforms.name;where platforms = (6,48,49,130,167,169) & genres = (${selectedGenre.id});
+      limit 10;
+    `
+          : `
+      fields name, rating, first_release_date, cover.image_id, platforms.name; where platforms = (6,48,49,130,167,169);
+      limit 10;
+    `,
         { signal: controller.signal },
       )
       .then((res) => {
@@ -59,7 +69,7 @@ const useGames = () => {
         }
       });
     return () => controller.abort();
-  }, []);
+  }, [selectedGenre]);
 
   return { games, error, isLoading };
 };
