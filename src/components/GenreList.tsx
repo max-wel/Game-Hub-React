@@ -1,9 +1,10 @@
-import { HStack, Icon, List, Text } from "@chakra-ui/react";
+import { HStack, Icon, List, Spinner, Text } from "@chakra-ui/react";
 import useGenres from "../hooks/useGenres";
 import { genreIconMap } from "../services/genreIconMap";
 
 const GenreList = () => {
-  const { data } = useGenres();
+  const { data, isLoading } = useGenres();
+  if (isLoading) return <Spinner />;
   return (
     <List.Root listStyleType="none">
       {data.map((genre) => (

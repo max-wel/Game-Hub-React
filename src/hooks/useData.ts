@@ -22,7 +22,11 @@ const useData = <T>(endpoint: string, body: string) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      });
     return () => controller.abort();
   }, []);
   return { data, error, isLoading };
