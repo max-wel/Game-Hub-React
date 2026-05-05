@@ -24,31 +24,39 @@ export interface Game {
   rating: number;
 }
 
-const useGames = (selectedGenre: Genre | null) => {
+const useGames = (
+  selectedGenre: Genre | null,
+  selectedPlatform: number | null,
+) => {
   const [games, setGames] = useState<Game[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
   const getImageUrl = (imageId: string) =>
     `https://images.igdb.com/igdb/image/upload/t_1080p/${imageId}.jpg`;
+  const where: string[] = [
+    "platforms = (6,48,49,130,167,169)", // base filter
+  ];
+
+  if (selectedGenre) {
+    where.push(`genres = (${selectedGenre.id})`);
+  }
+
+  if (selectedPlatform) {
+    where.push(`platforms = (${selectedPlatform})`);
+  }
+
+  const query = `
+  fields name, rating, first_release_date, cover.image_id, platforms.name;
+  where ${where.join(" & ")};
+  limit 10;
+`;
 
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
 
     apiClient
-      .post<FetchedGames[]>(
-        "/games",
-        selectedGenre
-          ? `
-      fields name, rating, first_release_date, cover.image_id, platforms.name;where platforms = (6,48,49,130,167,169) & genres = (${selectedGenre.id});
-      limit 10;
-    `
-          : `
-      fields name, rating, first_release_date, cover.image_id, platforms.name; where platforms = (6,48,49,130,167,169);
-      limit 10;
-    `,
-        { signal: controller.signal },
-      )
+      .post<FetchedGames[]>("/games", query, { signal: controller.signal })
       .then((res) => {
         const transformed = res.data.map((game) => ({
           ...game,
@@ -69,7 +77,7 @@ const useGames = (selectedGenre: Genre | null) => {
         }
       });
     return () => controller.abort();
-  }, [selectedGenre]);
+  }, [selectedGenre, selectedPlatform]);
 
   return { games, error, isLoading };
 };

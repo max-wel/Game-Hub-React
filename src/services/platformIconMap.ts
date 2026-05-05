@@ -8,3 +8,10 @@ export const platformIconMap: { [key: string]: IconType } = {
   xbox: FaXbox,
   nintendo: BsNintendoSwitch,
 };
+
+export const platformIdMap: { [key: string]: number } = {
+  pc: 6,
+  playstation: 48,
+  xbox: 49,
+  nintendo: 130,
+};
