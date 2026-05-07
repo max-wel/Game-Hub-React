@@ -5,10 +5,11 @@ import GenreList from "./components/GenreList";
 import { useState } from "react";
 import type { Genre } from "./hooks/useGenres";
 import PlatformSelector from "./components/PlatformSelector";
+import type { Platform } from "./hooks/useGames";
 
 export interface GameQuery {
   genre: Genre | null;
-  platform: number | null;
+  platform: Platform | null;
 }
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
       </Stack>
       <GridItem area="main">
         <PlatformSelector
+          selectedPlatform={gameQuery.platform}
           onSelectPlatform={(platform) =>
             setGameQuery({ ...gameQuery, platform })
           }

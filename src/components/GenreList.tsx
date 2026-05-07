@@ -1,6 +1,6 @@
-import { HStack, Icon, Link, List, Spinner } from "@chakra-ui/react";
+import { HStack, Image, Link, List, Spinner } from "@chakra-ui/react";
 import useGenres, { type Genre } from "../hooks/useGenres";
-import { genreIconMap } from "../services/genreIconMap";
+import getCroppedImageUrl from "../services/image-url";
 
 interface Props {
   selectedGenre: Genre | null;
@@ -15,7 +15,11 @@ const GenreList = ({ onSelectGenre, selectedGenre }: Props) => {
       {data.map((genre) => (
         <List.Item key={genre.id} paddingY={1.5}>
           <HStack>
-            <Icon as={genreIconMap[genre.id]} size="lg" color="gray.500" />
+            <Image
+              boxSize="32px"
+              borderRadius="full"
+              src={getCroppedImageUrl(genre.image_background)}
+            />
             <Link
               fontSize="md"
               fontWeight={genre.id == selectedGenre?.id ? "bolder" : "medium"}

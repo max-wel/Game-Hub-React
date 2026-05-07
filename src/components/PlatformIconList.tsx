@@ -1,43 +1,44 @@
+import {
+  FaWindows,
+  FaPlaystation,
+  FaXbox,
+  FaApple,
+  FaLinux,
+  FaAndroid,
+} from "react-icons/fa";
+import { MdPhoneIphone } from "react-icons/md";
+
+import { BsGlobe, BsNintendoSwitch } from "react-icons/bs";
 import { HStack, Icon } from "@chakra-ui/react";
-// import { MdPhoneIphone } from "react-icons/md";
-import type { Platform } from "../hooks/useGames";
-import { platformIconMap } from "../services/platformIconMap";
+import { type Platform } from "../hooks/useGames";
+import type { ReactNode } from "react";
 
 interface Props {
   platforms: Platform[];
 }
 
-function PlatformIconList({ platforms }: Props) {
-  const platformGroupMap: { [key: number]: string } = {
-    // PC
-    6: "pc",
-
-    // PlayStation
-    48: "playstation",
-    167: "playstation",
-    9: "playstation",
-
-    // Xbox
-    49: "xbox",
-    169: "xbox",
-    12: "xbox",
-
-    // Nintendo
-    130: "nintendo",
-    137: "nintendo",
-    41: "nintendo",
+const PlatformIconList = ({ platforms }: Props) => {
+  const iconMap: { [key: string]: ReactNode } = {
+    pc: <FaWindows />,
+    playstation: <FaPlaystation />,
+    xbox: <FaXbox />,
+    nintendo: <BsNintendoSwitch />,
+    mac: <FaApple />,
+    linux: <FaLinux />,
+    android: <FaAndroid />,
+    ios: <MdPhoneIphone />,
+    web: <BsGlobe />,
   };
-  const uniqueGroups = [
-    ...new Set(platforms.map(({ id }) => platformGroupMap[id]).filter(Boolean)),
-  ];
 
   return (
-    <HStack>
-      {uniqueGroups.map((g) => (
-        <Icon key={g} as={platformIconMap[g]} color="gray.500" />
+    <HStack marginY={1}>
+      {platforms.map((platform) => (
+        <Icon key={platform.id} color="gray.500">
+          {iconMap[platform?.slug] ?? <></>}
+        </Icon>
       ))}
     </HStack>
   );
-}
+};
 
 export default PlatformIconList;
