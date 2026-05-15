@@ -10,7 +10,7 @@ import { MdPhoneIphone } from "react-icons/md";
 
 import { BsGlobe, BsNintendoSwitch } from "react-icons/bs";
 import { HStack, Icon } from "@chakra-ui/react";
-import { type Platform } from "../hooks/usePlatforms";
+import { type Platform } from "../entities/Platform";
 import type { ReactNode } from "react";
 
 interface Props {
