@@ -1,7 +1,8 @@
 import { Heading, Spinner } from "@chakra-ui/react";
 import { useParams } from "react-router";
-import useGameDetail from "../hooks/useGameDetail";
+import GameAttributes from "../components/GameAttributes";
 import SummarizeText from "../components/SummarizeText";
+import useGameDetail from "../hooks/useGameDetail";
 
 const GameDetailPage = () => {
   const { id } = useParams();
@@ -13,6 +14,7 @@ const GameDetailPage = () => {
     <>
       <Heading>{game.name}</Heading>
       <SummarizeText maxChars={300}>{game.description_raw}</SummarizeText>
+      <GameAttributes game={game} />
     </>
   );
 };
